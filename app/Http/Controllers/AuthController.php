@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -13,6 +14,7 @@ class AuthController extends Controller
 
     public function loginSubmit(Request $request)
     {
+        // Validate the request
         $request->validate(
             [
                 'text_username' => 'required|email',
@@ -26,14 +28,24 @@ class AuthController extends Controller
                 'text_password.max' => 'The password can have only a maximum of :max characters',
             ]
         );
+
         $username = $request->input('text_username');
         $password = $request->input('text_password');
 
-        echo 'OK!';
+        // Test database connection
+        try {
+            DB::connection()->getPdo();
+            // Return a success message
+            return response()->json(['message' => 'Connection is OK!']);
+        } catch (\PDOException $e) {
+            // Return an error message with the exception message
+            return response()->json(['error' => 'Connection failed: ' . $e->getMessage()], 500);
+        }
     }
 
     public function logout()
     {
-        echo 'logout';
+        // Handle logout
+        return response()->json(['message' => 'Logout successful']);
     }
 }
