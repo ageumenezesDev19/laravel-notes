@@ -13,17 +13,17 @@ class UsersTableSeeder extends Seeder
         // create multiple users
         DB::table('users')->insert([
             [
-                'username' => 'user1@gmial.com',
+                'username' => 'user1@gmail.com',
                 'password' => bcrypt('abc123456'),
                 'created_at' => date('Y-m-d H:i:s')
             ],
             [
-                'username' => 'user2@gmial.com',
+                'username' => 'user2@gmail.com',
                 'password' => bcrypt('abc123456'),
                 'created_at' => date('Y-m-d H:i:s')
             ],
             [
-                'username' => 'user3@gmial.com',
+                'username' => 'user3@gmail.com',
                 'password' => bcrypt('abc123456'),
                 'created_at' => date('Y-m-d H:i:s')
             ],
