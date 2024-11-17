@@ -8,7 +8,7 @@ class MainController extends Controller
 {
     public function index() 
     {
-        'I`m inside the app!';
+        echo 'I`m inside the app!';
     }
 
     public function newNote() 
