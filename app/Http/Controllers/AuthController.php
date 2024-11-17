@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -32,20 +33,49 @@ class AuthController extends Controller
         $username = $request->input('text_username');
         $password = $request->input('text_password');
 
-        // Test database connection
-        try {
-            DB::connection()->getPdo();
-            // Return a success message
-            return response()->json(['message' => 'Connection is OK!']);
-        } catch (\PDOException $e) {
-            // Return an error message with the exception message
-            return response()->json(['error' => 'Connection failed: ' . $e->getMessage()], 500);
+        // check if users exists
+        $user = User::where('username', $username)
+                ->where('deleted_at', NULL)
+                ->first();
+
+        if(!$user) {
+            return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with(
+                        'loginError',
+                        'Username or password is incorrect'
+                    );
         }
+
+        // check if password is correct
+        if(!password_verify($password, $user->password)) {
+            return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with(
+                        'loginError',
+                        'Username or password is incorrect'
+                    );
+        };
+        //update last login
+        $user_last_login = date('Y-m-d H:i:s');
+        $user->save();
+
+        session([
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+            ]
+        ]);
+
+        echo 'Logged in successfully';
     }
 
     public function logout()
     {
         // Handle logout
-        return response()->json(['message' => 'Logout successful']);
+        session()->forget('user');
+        return redirect()->to('/login');
     }
 }
