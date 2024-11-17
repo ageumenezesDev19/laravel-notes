@@ -4,7 +4,7 @@
         <div class="row justify-content-center w-100">
             <div class="col-md-6 col-sm-8">
                 <div class="card p-5">
-                    
+
                     <!-- logo -->
                     <div class="text-center p-3">
                         <img src="assets/images/logo.png" alt="Notes logo">
