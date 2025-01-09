@@ -1,4 +1,4 @@
-<div class="col">
+<div class="col mb-4">
         <div class="row">
         <div class="card p-4">
             <div class="row">
@@ -16,8 +16,14 @@
                     @endif
                 </div>
                 <div class="col text-end">
-                    <a href="/edit/{{ Crypt::encrypt($note['id']) }}" class="btn btn-outline-secondary btn-sm mx-1"><i class="fa-regular fa-pen-to-square"></i></a>
-                    <a href="/delete/{{ Crypt::encrypt($note['id']) }}" class="btn btn-outline-danger btn-sm mx-1"><i class="fa-regular fa-trash-can"></i></a>
+                    <a
+                        href="{{ route('edit', ['id' => Crypt::encrypt($note['id'])]) }}"
+                        class="btn btn-outline-secondary btn-sm mx-1"><i class="fa-regular fa-pen-to-square"></i>
+                    </a>
+                    <a
+                        href="{{ route('delete', ['id' => Crypt::encrypt($note['id'])]) }}"
+                        class="btn btn-outline-danger btn-sm mx-1"><i class="fa-regular fa-trash-can"></i>
+                    </a>
                 </div>
             </div>
             <hr>
