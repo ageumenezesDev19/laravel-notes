@@ -15,5 +15,5 @@ class Operations
     }
 
   return $id;
-  }
+}
 }
