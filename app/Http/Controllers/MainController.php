@@ -31,7 +31,30 @@ class MainController extends Controller
 
     public function newNoteSubmit(Request $request)
     {
-        echo "I'm creating a new note.";
+        $request->validate(
+            [
+                'text_title' => 'required|min:3|max:200',
+                'text_note' => 'required|min:3|max:3000'
+            ],
+            [
+                'text_title.required' => 'The title is required',
+                'text_title.min' => 'The title requires at least :min characters',
+                'text_title.max' => 'The title can have only a maximum of :max characters',
+                'text_note.required' => 'The note is required',
+                'text_note.min' => 'The note requires at least :min characters',
+                'text_note.max' => 'The note can have only a maximum of :max characters',
+            ]
+        );
+
+        $id = session('user.id');
+
+        $note = new Note();
+        $note->user_id = $id;
+        $note->title = $request->text_title;
+        $note->text = $request->text_note;
+        $note->save();
+
+        return redirect()->route('home');
     }
 
     public function editNote($id)
