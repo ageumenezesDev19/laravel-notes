@@ -18,6 +18,7 @@ Route::middleware([CheckIsLoggedIn::class])->group(function() {
 
   // edit note
   Route::get('/editNote/{id}', [MainController::class, 'editNote'])->name('edit');
+  Route::post('/editNoteSubmit/{id}', [MainController::class, 'editNoteSubmit'])->name('editNoteSubmit');
   Route::get('/deleteNote/{id}', [MainController::class, 'deleteNote'])->name('delete');
 
   Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

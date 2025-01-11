@@ -20,7 +20,7 @@
             </div>
 
             <!-- form -->
-            <form action="" method="post">
+            <form action="{{ route('editNoteSubmit', ['id' => $note->id]) }}" method="POST">
                 @csrf
                 <input type="hidden" name="note_id" value="{{ Crypt::encrypt($note->id) }}">
                 <div class="row mt-3">
