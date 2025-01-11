@@ -11,20 +11,24 @@ use Illuminate\Support\Facades\Crypt;
 
 class MainController extends Controller
 {
-    public function index() 
-{
-    $id = session('user.id');
+    public function index()
+    {
+        $id = session('user.id');
+
+        if (!$id) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
         $notes = User::find($id)
-                    ->notes()
-                    ->whereNull('deleted_at')
-                    ->get()
-                    ->toArray();
+            ->notes()
+            ->whereNull('deleted_at')
+            ->get()
+            ->toArray();
 
-        // show home view
         return view('home', ['notes' => $notes]);
-}
+    }
 
-    public function newNote() 
+    public function newNote()
     {
         return view('new_note');
     }
@@ -48,6 +52,10 @@ class MainController extends Controller
 
         $id = session('user.id');
 
+        if (!$id) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
         $note = new Note();
         $note->user_id = $id;
         $note->title = $request->text_title;
@@ -63,9 +71,54 @@ class MainController extends Controller
 
         $note = Note::find($id);
 
-        return View('edit_note', ['note' => $note]);
+        if (!$note) {
+            return redirect()->route('home')->with('error', 'Note not found.');
+        }
+
+        return view('edit_note', ['note' => $note]);
     }
 
+    public function editNoteSubmit(Request $request)
+    {
+        $request->validate(
+            [
+                'text_title' => 'required|min:3|max:200',
+                'text_note' => 'required|min:3|max:3000'
+            ],
+            [
+                'text_title.required' => 'The title is required',
+                'text_title.min' => 'The title requires at least :min characters',
+                'text_title.max' => 'The title can have only a maximum of :max characters',
+                'text_note.required' => 'The note is required',
+                'text_note.min' => 'The note requires at least :min characters',
+                'text_note.max' => 'The note can have only a maximum of :max characters',
+            ]
+        );
+
+        $id = session('user.id');
+
+        if (!$id) {
+            return redirect()->route('login')->with('error', 'Please log in.');
+        }
+
+        if (!$request->note_id) {
+            return redirect()->route('home')->with('error', 'Invalid note ID.');
+        }
+
+        $noteId = Operations::decryptedId($request->note_id);
+
+        $note = Note::find($noteId);
+
+        if (!$note) {
+            return redirect()->route('home')->with('error', 'Note not found.');
+        }
+
+        $note->title = $request->text_title;
+        $note->text = $request->text_note;
+        $note->save();
+
+        return redirect()->route('home')->with('success', 'Note updated successfully.');
+    }
     public function deleteNote($id)
     {
         $id = Operations::decryptedId($id);
