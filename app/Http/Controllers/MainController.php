@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use App\Models\User;
 use App\Services\Operations;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
 
 class MainController extends Controller
 {
@@ -123,6 +121,24 @@ class MainController extends Controller
     {
         $id = Operations::decryptedId($id);
 
-        echo "I`m deleting a note with id = $id!";
+        $note = Note::find($id);
+
+        return view('delete_note', ['note' => $note]);
+    }
+
+    public function deleteNoteConfirm($id)
+    {
+        $id = Operations::decryptedId($id);
+
+        $note = Note::find($id);
+
+        // Hard delete:
+        // $note->delete();
+
+        // Soft delete:
+        $note->deleted_at = date('Y-m-d H:i:s');
+        $note->save();
+
+        return redirect()->route('home');
     }
 }
