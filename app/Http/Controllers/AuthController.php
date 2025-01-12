@@ -77,6 +77,6 @@ class AuthController extends Controller
     {
         // Handle logout
         session()->forget('user');
-        return redirect()->to('/login');
+        return redirect()->to('/login')->with('success', 'Successfully logged out.');
     }
 }
