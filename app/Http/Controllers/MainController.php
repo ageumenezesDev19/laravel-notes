@@ -67,11 +67,11 @@ class MainController extends Controller
     {
         $id = Operations::decryptedId($id);
 
-        $note = Note::find($id);
-
-        if (!$note) {
-            return redirect()->route('home')->with('error', 'Note not found.');
+        if($id === null) {
+            return redirect()->route('home');
         }
+
+        $note = Note::find($id);
 
         return view('edit_note', ['note' => $note]);
     }
@@ -105,11 +105,11 @@ class MainController extends Controller
 
         $noteId = Operations::decryptedId($request->note_id);
 
-        $note = Note::find($noteId);
-
-        if (!$note) {
-            return redirect()->route('home')->with('error', 'Note not found.');
+        if($id === null) {
+            return redirect()->route('home');
         }
+
+        $note = Note::find($noteId);
 
         $note->title = $request->text_title;
         $note->text = $request->text_note;
@@ -121,6 +121,10 @@ class MainController extends Controller
     {
         $id = Operations::decryptedId($id);
 
+        if($id === null) {
+            return redirect()->route('home');
+        }
+
         $note = Note::find($id);
 
         return view('delete_note', ['note' => $note]);
@@ -130,14 +134,21 @@ class MainController extends Controller
     {
         $id = Operations::decryptedId($id);
 
+        if($id === null) {
+            return redirect()->route('home');
+        }
+
         $note = Note::find($id);
 
         // Hard delete:
         // $note->delete();
 
         // Soft delete:
-        $note->deleted_at = date('Y-m-d H:i:s');
-        $note->save();
+        // $note->deleted_at = date('Y-m-d H:i:s');
+        // $note->save();
+
+        // Soft delete 2 (property in model):
+        $note->delete();
 
         return redirect()->route('home');
     }
