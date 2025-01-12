@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string('username', 50)->nullable();
-            $table->string('password', 200)->nullable();
+            $table->string('username', 50)->unique();  // Ensure unique username
+            $table->string('password', 60);  // You might want to set an appropriate length for password
             $table->dateTime('last_login')->nullable();
             $table->timestamps();
             $table->softDeletes();
