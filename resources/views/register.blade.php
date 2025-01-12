@@ -1,4 +1,5 @@
 @extends('layouts.main_layout')
+
 @section('content')
     <div class="container vh-100 d-flex align-items-center" style="margin-top: -3rem;">
         <div class="row justify-content-center w-100">
@@ -13,39 +14,43 @@
                     <!-- form -->
                     <div class="row justify-content-center">
                         <div class="col-md-10 col-12">
-                            <form action="/loginSubmit" method="post" novalidate>
+                            <form action="{{ route('register.submit') }}" method="post" novalidate>
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="text_username" class="form-label">Username</label>
-                                    <input type="text" class="form-control bg-dark text-info" name="text_username" value="{{ old('text_username') }}">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control bg-dark text-info" name="username" value="{{ old('username') }}">
                                     {{-- show error --}}
-                                    @error('text_username')
+                                    @error('username')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="text_password" class="form-label">Password</label>
-                                    <input type="password" class="form-control bg-dark text-info" name="text_password">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control bg-dark text-info" name="password">
                                     {{-- show error --}}
-                                    @error('text_password')
+                                    @error('password')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <button type="submit" class="btn btn-secondary w-100">LOGIN</button>
+                                    <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control bg-dark text-info" name="password_confirmation">
+                                </div>
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-secondary w-100">REGISTER</button>
                                 </div>
                             </form>
 
-                            {{-- invalid login --}}
-                            @if(session('loginError'))
+                            {{-- invalid registration --}}
+                            @if(session('registrationError'))
                                 <div class="alert alert-danger text-center">
-                                    {{ session('loginError') }}
+                                    {{ session('registrationError') }}
                                 </div>
                             @endif
 
-                            <!-- Register Link -->
+                            <!-- Login Link -->
                             <div class="text-center mt-3">
-                                <small>Don't have an account? <a href="{{ route('register') }}">Register here</a></small>
+                                <small>Already have an account? <a href="{{ route('login') }}">Login here</a></small>
                             </div>
                         </div>
                     </div>
