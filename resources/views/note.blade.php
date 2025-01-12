@@ -1,4 +1,4 @@
-<div class="col mb-4">
+<div class="col mb-1">
         <div class="row">
         <div class="card p-4">
             <div class="row">
